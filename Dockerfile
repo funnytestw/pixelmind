@@ -1,7 +1,7 @@
-# «” Œœ«„ ‰”Œ… PHP „⁄ Apache Ã«Â“… ··«—«›Ì·
+# √á√ì√ä√é√è√á√£ √§√ì√é√â PHP √£√ö Apache √å√á√•√í√â √°√°√á√ë√á√ù√≠√°
 FROM php:8.2-apache
 
-#  À»Ì  «·≈÷«›«  «··«“„… ··«—«›Ì· Êﬁ«⁄œ… «·»Ì«‰« 
+# √ä√ã√à√≠√ä √á√°√Ö√ñ√á√ù√á√ä √á√°√°√á√í√£√â √°√°√á√ë√á√ù√≠√° √¶√û√á√ö√è√â √á√°√à√≠√á√§√á√ä
 RUN apt-get update && apt-get install -y \
     libpng-dev \
     libonig-dev \
@@ -11,31 +11,31 @@ RUN apt-get update && apt-get install -y \
     git \
     curl
 
-#  À»Ì  ≈÷«›«  PHP
+# √ä√ã√à√≠√ä √Ö√ñ√á√ù√á√ä PHP
 RUN docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd
 
-#  ›⁄Ì· Apache Rewrite Module (÷—Ê—Ì Ãœ« ··«—«›Ì·)
+# √ä√ù√ö√≠√° Apache Rewrite Module (√ñ√ë√¶√ë√≠ √å√è√á√∞ √°√°√á√ë√á√ù√≠√°)
 RUN a2enmod rewrite
 
-# ÷»ÿ „Ã·œ «·⁄„· œ«Œ· «·”Ì—›—
+# √ñ√à√ò √£√å√°√è √á√°√ö√£√° √è√á√é√° √á√°√ì√≠√ë√ù√ë
 WORKDIR /var/www/html
 
-# ‰”Œ „·›«  «·„‘—Ê⁄ ≈·Ï «·”Ì—›—
+# √§√ì√é √£√°√ù√á√ä √á√°√£√î√ë√¶√ö √Ö√°√¨ √á√°√ì√≠√ë√ù√ë
 COPY . .
 
-#  À»Ì  Composer
+# √ä√ã√à√≠√ä Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 RUN composer install --no-dev --optimize-autoloader
 
-#  €ÌÌ— „·ﬂÌ… «·„·›«  ·‹ Apache
+# √ä√õ√≠√≠√ë √£√°√ü√≠√â √á√°√£√°√ù√á√ä √°√ú Apache
 RUN chown -R www-data:www-data /var/www/html/storage /var/www/html/bootstrap/cache
 
-#  ⁄œÌ· ≈⁄œ«œ«  Apache ·Ì⁄„· „‰ „Ã·œ public
+# √ä√ö√è√≠√° √Ö√ö√è√á√è√á√ä Apache √°√≠√ö√£√° √£√§ √£√å√°√è public
 ENV APACHE_DOCUMENT_ROOT /var/www/html/public
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/sites-available/*.conf
 RUN sed -ri -e 's!/var/www/html!${APACHE_DOCUMENT_ROOT}!g' /etc/apache2/apache2.conf /etc/apache2/conf-available/*.conf
 
-# › Õ «·„‰›– 80
+# √ù√ä√ç √á√°√£√§√ù√ê 80
 EXPOSE 80
 
 CMD ["apache2-foreground"]
